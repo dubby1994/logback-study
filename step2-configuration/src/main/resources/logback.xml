@@ -1,0 +1,59 @@
+<!--scan=true表示，配置文件如果变动会及时刷新配置，后面的是刷新频率；packagingData=true会丰富异常的信息-->
+<configuration scan="true" scanPeriod="30 seconds" packagingData="true">
+
+    <!-- 设置一个JVM的shutdown hook，停留10s，给logback留下时间完成未完成的日志处理，最后释放资源 -->
+    <shutdownHook class="ch.qos.logback.core.hook.DelayingShutdownHook">
+        <Delay>10000</Delay>
+    </shutdownHook>
+
+    <statusListener class="ch.qos.logback.core.status.OnConsoleStatusListener"/>
+
+    <timestamp key="bySecond" datePattern="yyyyMMdd'T'HHmmss"/>
+
+    <contextName>step2-configuration</contextName>
+
+    <!-- 自定义变量，使用${USER_HOME}，Windows环境用这个格式，Linux路劲我相信你知道怎么配 -->
+    <property name="USER_HOME" value="D://JavaRepo/logback-study/log"/>
+
+    <appender name="STDOUT" class="ch.qos.logback.core.ConsoleAppender">
+        <!-- ch.qos.logback.classic.encoder.PatternLayoutEncoder -->
+        <encoder>
+            <pattern>%d{HH:mm:ss.SSS} %contextName [%thread] %-5level %logger{36} - %X{mdcMsg} %msg%n</pattern>
+        </encoder>
+    </appender>
+
+    <appender name="ROLLING_FILE" class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <!-- 支持多个JVM进程写到同一个文件里 -->
+        <prudent>true</prudent>
+        <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+            <FileNamePattern>${USER_HOME}/rolling-file-%d{yyyy-MM-dd-HH-mm-ss}.log</FileNamePattern>
+            <MaxHistory>3</MaxHistory>
+            <totalSizeCap>3GB</totalSizeCap>
+        </rollingPolicy>
+        <encoder>
+            <pattern>%contextName %date %level [%thread] %logger{10} [%file:%line] %msg%n</pattern>
+        </encoder>
+    </appender>
+
+    <appender name="FILE" class="ch.qos.logback.core.FileAppender">
+        <!-- 使用时间戳来命名文件 -->
+        <file>${USER_HOME}/file-${bySecond}.log</file>
+        <encoder>
+            <pattern>%contextName %date %level [%thread] %logger{10} [%file:%line] %msg%n</pattern>
+        </encoder>
+    </appender>
+
+    <!-- additivity="false"代表不累计，也就是这个logger的日志输出不会继续往上抛，也就不会重复打印；如果true，那么这个logger的输出还会继续抛给root -->
+    <logger name="dubby.additivity.logger" level="INFO" additivity="false">
+        <appender-ref ref="STDOUT"/>
+        <appender-ref ref="FILE"/>
+        <appender-ref ref="ROLLING_FILE"/>
+    </logger>
+
+    <root level="debug">
+        <appender-ref ref="STDOUT"/>
+        <appender-ref ref="FILE"/>
+        <appender-ref ref="ROLLING_FILE"/>
+    </root>
+
+</configuration>
