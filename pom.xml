@@ -17,6 +17,8 @@
         <module>step4-socket-appender-server</module>
         <module>step5-db-appender</module>
         <module>step6-async-appender</module>
+        <module>step7-encoder</module>
+        <module>step8-layout</module>
     </modules>
 
     <properties>

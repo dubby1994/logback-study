@@ -1,0 +1,36 @@
+<configuration>
+
+    <!-- 设置一个JVM的shutdown hook，停留10s，给logback留下时间完成未完成的日志处理，最后释放资源 -->
+    <shutdownHook class="ch.qos.logback.core.hook.DelayingShutdownHook">
+        <Delay>10000</Delay>
+    </shutdownHook>
+
+    <appender name="STDOUT" class="ch.qos.logback.core.ConsoleAppender">
+        <encoder class="ch.qos.logback.core.encoder.LayoutWrappingEncoder">
+            <layout class="cn.dubby.logback.study.step8.MyJsonLayout" />
+        </encoder>
+    </appender>
+
+    <appender name="ROLLING_FILE" class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <!-- 支持多个JVM进程写到同一个文件里 -->
+        <prudent>true</prudent>
+        <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+            <FileNamePattern>log/step8-layout-%d{yyyy-MM-dd-HH}.log</FileNamePattern>
+            <MaxHistory>3</MaxHistory>
+            <totalSizeCap>3GB</totalSizeCap>
+        </rollingPolicy>
+        <encoder class="ch.qos.logback.core.encoder.LayoutWrappingEncoder">
+            <layout class="cn.dubby.logback.study.step8.MyJsonLayout" />
+        </encoder>
+    </appender>
+
+    <appender name="ASYNC" class="ch.qos.logback.classic.AsyncAppender">
+        <appender-ref ref="ROLLING_FILE" />
+    </appender>
+
+    <root level="debug">
+        <appender-ref ref="STDOUT"/>
+        <appender-ref ref="ASYNC"/>
+    </root>
+
+</configuration>
