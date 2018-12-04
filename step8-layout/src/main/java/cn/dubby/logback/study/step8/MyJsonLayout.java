@@ -24,7 +24,7 @@ public class MyJsonLayout extends LayoutBase<ILoggingEvent> {
         map.put("threadName", event.getThreadName());
         map.put("loggerName", event.getLoggerName());
         map.put("message", event.getFormattedMessage());
-        map.put("mdc", event.getMDCPropertyMap())
+        map.put("mdc", event.getMDCPropertyMap());
 
         try {
             return objectMapper.writeValueAsString(map) + CoreConstants.LINE_SEPARATOR;
