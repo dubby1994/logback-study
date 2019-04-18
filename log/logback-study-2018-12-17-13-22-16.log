@@ -1,0 +1,4 @@
+2018-12-17 13:22:16,062 INFO [main] c.d.l.s.s.BasicUsage [BasicUsage.java:16] log message, timestamp 1545024136062
+2018-12-17 13:22:16,264 INFO [main] c.d.l.s.s.BasicUsage [BasicUsage.java:16] log message, timestamp 1545024136264
+2018-12-17 13:22:16,465 INFO [main] c.d.l.s.s.BasicUsage [BasicUsage.java:16] log message, timestamp 1545024136465
+2018-12-17 13:22:16,665 INFO [main] c.d.l.s.s.BasicUsage [BasicUsage.java:16] log message, timestamp 1545024136665
